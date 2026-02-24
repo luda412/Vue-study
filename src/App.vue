@@ -2,35 +2,23 @@
 export default {
   data() {
     return {
-      message: 'Hello Vue.js!'
+      message: 'Hello Vue.js!',
+      showComponet: false
     }
-  },
-  beforeCreate() {
-    console.log('beforeCreate')
-  },
-  created() {
-    console.log('created')
-  },
-  mounted() {
-    console.log('mounted')
-    this.message = 'Hello Vue!'
-  },
-  updated() {
-    this.messge = 'again'
-    console.log('updated')
   }
 }
 </script>
 
 <template>
-  <title>Vue Instance Lifecycle</title>
+  
+  <button @click="showComponet = true">
+    컴포넌트 등록
+  </button>
+
+  <MyComponent v-if="showComponet"></MyComponent>
+  
   <h1>{{message}}</h1>
 </template>
 
 <style scoped>
-h1 {
-  font-size: 2rem;
-  text-align: center;
-  margin-top: 40px;
-}
 </style>
