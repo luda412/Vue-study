@@ -1,17 +1,30 @@
-<script setup>
-import { reactive, ref } from 'vue'
-
-const message = ref('Hello Vue.js')
-const state = reactive({
-  message: 'Count',
-  count:0
-})
+<script>
+export default {
+  data() {
+    return {
+      message: 'Hello Vue.js!'
+    }
+  },
+  beforeCreate() {
+    console.log('beforeCreate')
+  },
+  created() {
+    console.log('created')
+  },
+  mounted() {
+    console.log('mounted')
+    this.message = 'Hello Vue!'
+  },
+  updated() {
+    this.messge = 'again'
+    console.log('updated')
+  }
+}
 </script>
 
 <template>
+  <title>Vue Instance Lifecycle</title>
   <h1>{{message}}</h1>
-  <h2>{{ state.message }}</h2>
-  <p>{{ state.count }}</p>
 </template>
 
 <style scoped>
