@@ -1,24 +1,10 @@
-<script>
-export default {
-  data() {
-    return {
-      message: 'Hello Vue.js!',
-      showComponet: false
-    }
-  }
-}
+<script setup>
+import ButtonCounter from './components/ButtonCounter.vue';
 </script>
 
 <template>
-  
-  <button @click="showComponet = true">
-    컴포넌트 등록
-  </button>
-
-  <MyComponent v-if="showComponet"></MyComponent>
-  
-  <h1>{{message}}</h1>
+  <h1>Here is a child component! </h1>
+  <ButtonCounter/>
+  <ButtonCounter/>
+  <ButtonCounter/>
 </template>
-
-<style scoped>
-</style>
