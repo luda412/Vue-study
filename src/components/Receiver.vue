@@ -1,10 +1,10 @@
 <script setup>
 import emitter from '@/eventBus';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 
 const message = ref('')
 
-function handleMessage(data){
+function handleMessage(data) {
     message.value = data;
 }
 
@@ -14,7 +14,7 @@ onMounted(() => {
 })
 
 // 메모리 관리를 위한 off
-onMounted(()=> {
+onUnmounted(()=> {
     emitter.off('send-message', handleMessage)
 })
 </script>
