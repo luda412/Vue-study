@@ -1,12 +1,8 @@
 <template>
-  <h1>Here is a child component! </h1>
-  <ButtonCounter/>
-  <ButtonCounter/>
-  <ButtonCounter/>
-  <TheView />
+  <h1>Example</h1>
+  <ParentComponent />
 </template>
 
 <script setup>
-import ButtonCounter from './components/ButtonCounter.vue';
-import TheView from './views/TheView.vue';
+import ParentComponent from './views/ParentComponent.vue';
 </script>
