@@ -1,6 +1,6 @@
 <template>
-    <p>{{ title }}</p>
-    <p>{{ contents }}</p>
+    <p>제목: {{ title }}</p>
+    <p>내용: {{ contents }}</p>
 </template>
 
 <script setup>
