@@ -17,7 +17,7 @@
         <hr/>
         <h2>미리보기(현재 state)</h2>
         <!-- 부모 state를 자식에게 props로 전달 -->
-        <AppCard :title="title" :contents="contents"/>
+        <AppCard :title="title" :contents="contents" @request-save="handleRequestSave"/>
     </div>
 </template>
 
@@ -95,6 +95,13 @@ async function loadDiary(){
         loading.value = false
     }
 }
+
+function handleRequestSave(payLoad) {
+    //payLoad = { title, contents }
+    title.value = payLoad.title
+    contents.value = payLoad.contents
+}
+
 </script>
 
 <!-- 부모 컴포넌트 TheView에서 자식 컴포넌트인 AppCard에 title, content 전달 -->
