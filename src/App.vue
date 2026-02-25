@@ -1,8 +1,8 @@
 <template>
   <h1>Example</h1>
-  <ParentComponent />
+  <Parent/>
 </template>
 
 <script setup>
-import ParentComponent from './views/ParentComponent.vue';
+import Parent from './components/Parent.vue';
 </script>
