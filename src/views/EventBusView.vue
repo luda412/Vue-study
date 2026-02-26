@@ -1,6 +1,6 @@
 <script setup>
-import Receiver from '@/components/Receiver.vue';
-import Sender from '@/components/Sender.vue';
+import Receiver from '@/oldcomponents/Receiver.vue';
+import Sender from '@/oldcomponents/Sender.vue';
 
 
 </script>

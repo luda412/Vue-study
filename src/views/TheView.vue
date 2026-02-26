@@ -23,7 +23,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import AppCard from '@/components/AppCard.vue';
+import AppCard from '@/oldcomponents/AppCard.vue';
 
 const title = ref('')
 const contents = ref('')

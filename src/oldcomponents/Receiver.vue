@@ -1,5 +1,5 @@
 <script setup>
-import emitter from '@/eventBus';
+import emitter from '@/shared/eventBus';
 import { onMounted, onUnmounted, ref } from 'vue';
 
 const message = ref('')
