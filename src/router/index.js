@@ -1,4 +1,12 @@
+import FooterBar from '@/layouts/FooterBar.vue';
+import HeaderBar from '@/layouts/HeaderBar.vue';
 import { createRouter, createWebHistory } from 'vue-router'
+
+const withChrome = (defaultView) => ({
+    default: defaultView,
+    header: HeaderBar,
+    footer: FooterBar,
+})
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,25 +20,25 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: () => import('@/views/HomeView.vue'),
+            components: withChrome(() => import('@/views/HomeView.vue')),
             meta: {title: 'Home'},
         },
         {
             path: '/event-bus',
             name: 'eventBus',
-            component: () => import('@/views/EventBusView.vue'),
+            components: withChrome(() => import('@/views/EventBusView.vue')),
             meta: {title: 'Event Bus Practice'},
         },
         {
             path: '/the',
             name: 'theView',
-            component: () => import('@/views/TheView.vue'),
+            components: withChrome(() => import('@/views/TheView.vue')),
             meta: {title: 'The View'},
         },
         // 섹션 레이아웃 + 자식 라우트
         {
             path: '/users',
-            component: () => import('@/views/users/UsersLayout.vue'),
+            components: withChrome(() => import('@/views/users/UsersLayout.vue')),
             children: [
                 {
                     path: '',
@@ -41,7 +49,7 @@ const router = createRouter({
                 {
                     path: ':id',
                     name: 'users.detail',
-                    component: () => import('@/views/users/UserDetailView.vue'),
+                    components: () => import('@/views/users/UserDetailView.vue'),
                     meta: {title: 'User Detail', requiresAuth: true}
                 },
             ],
@@ -50,7 +58,7 @@ const router = createRouter({
         {
             path: '/:pathMatch(.*)*',
             name: 'notFound',
-            component: () => import('@/views/NotFoundView.vue'),
+            components: withChrome(() => import('@/views/NotFoundView.vue')),
             meta: {title: 'Not Found'}
         },
     ],
