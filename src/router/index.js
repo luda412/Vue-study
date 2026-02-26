@@ -19,7 +19,7 @@ const router = createRouter({
             path: '/event-bus',
             name: 'eventBus',
             component: () => import('@/views/EventBusView.vue'),
-            meta: {title: 'Event Bus Pratice'},
+            meta: {title: 'Event Bus Practice'},
         },
         {
             path: '/the',
@@ -60,7 +60,7 @@ router.beforeEach((to) =>{
     document.title = to.meta?.title ? `Demo | ${to.meta.title}` : 'Demo'
 
     //간단한 auth 시뮬레이션
-    const isLoggedIn = localStorage.getItem('demo.loggedIn') === 'ture'
+    const isLoggedIn = localStorage.getItem('demo.loggedIn') === 'true'
 
     if(to.meta?.requiresAuth && !isLoggedIn) {
         //로그인 페이지를 따로 두지 않고 home으로 돌려보내기
