@@ -65,7 +65,7 @@ const router = createRouter({
 })
 router.beforeEach((to) =>{
     //문서 타이틀 세팅
-    document.title = to.meta?.title ? `Demo | ${to.meta.title}` : 'Demo'
+    document.title = to.meta?.title ? `Todo | ${to.meta.title}` : 'Todo'
 
     //간단한 auth 시뮬레이션
     const isLoggedIn = localStorage.getItem('demo.loggedIn') === 'true'
