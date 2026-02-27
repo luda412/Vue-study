@@ -3,23 +3,49 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { RouterView } from 'vue-router';
 
-const post = ref(null)
-const loading = ref(false)
-const error = ref(null)
+const axiosPost = ref(null)
+const fetchPost = ref(null)
+
+const axiosLoading = ref(false)
+const fetchLoading = ref(false)
+
+const errorAxios = ref(null)
+const errorFetch = ref(null)
 
 const simpleGet = async () =>{
-  loading.value = true;
-  error.value = null;
+  axiosLoading.value = true;
+  errorAxios.value = null;
 
   try {
     const response = await axios.get('https://jsonplaceholder.typicode.com/posts/2')
-    post.value = response.data
-    console.log(post)
-  } catch (error){
-    error.value = "에러 발생"
-    console.error(error.value)
+    axiosPost.value = response.data
+    console.log(axiosPost)
+  } catch (err){
+    errorAxios.value = "에러 발생"
+    console.error(err)
   }finally{
-    loading.value = false
+    axiosLoading.value = false
+  }
+}
+
+const getByFetch =async () =>{
+  fetchLoading.value = true;
+  errorFetch.value = null;
+  try{
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts/2')
+    
+    if(!response.ok){
+      throw new Error(`Error ${response.status}`)
+    }
+    
+    const data = await response.json()
+    fetchPost.value = data
+    console.log('Response By Fetch Method', data)
+  } catch (err){
+    errorFetch.value = '에러 발생'
+    console.error(err)
+  } finally {
+    fetchLoading.value = false
   }
 }
 </script>
@@ -32,14 +58,26 @@ const simpleGet = async () =>{
     <hr sytle="margin: 0;" />
     
     <main style="padding: 20px;" >
-      <button @click="simpleGet">Get 요청</button>
+      <div>
+        <button @click="simpleGet">Get 요청</button>
       
-      <p v-if="loading">로딩 중...</p>
-      <p v-if="error">{{ error }}</p>
-      
-      <div v-if="post">
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.body }}</p>
+        <p v-if="axiosLoading">로딩 중...</p>
+        <p v-if="errorAxios">{{ errorAxios }}</p>
+        
+        <div v-if="axiosPost">
+          <h3>{{ axiosPost.title }}</h3>
+          <p>{{ axiosPost.body }}</p>
+        </div>
+      </div>
+      <div>
+        <button @click="getByFetch">Get 요청 Fetch 방법</button>
+        <p v-if="fetchLoading">로딩 중...</p>
+        <p v-if="errorFetch">{{ errorFetch }}</p>
+        
+        <div v-if="fetchPost">
+          <h3>{{ fetchPost.title }}</h3>
+          <p>{{ fetchPost.body }}</p>
+        </div>
       </div>
       <RouterView />
     </main>
