@@ -1,16 +1,15 @@
 <!-- 할 일 입력 및 추가 -->
 <script setup>
+import emitter from '@/shared/eventBus';
 import { ref } from 'vue';
 
 const item = ref('')
 
 const addTodo =() =>{
-    if(item.value !== ""){
-        const res = item.value && item.value.trim();
-        localStorage.setItem(res, res)
-        console.log(item.value)
-        clearInput();
-    }
+    const res = item.value.trim();
+    if(!res) return;
+    emitter.emit('todo:add', res)
+    clearInput();
 }
 const clearInput =()=>{
     item.value = '';
@@ -19,8 +18,8 @@ const clearInput =()=>{
 
 <template>
     <div class="inputBox shadow">
-        <input type="text" v-model="item" placeholder="Type what you have to do" v-on:keyup.enter="addTodo">
-        <span class="addContainer" v-on:click="addTodo">
+        <input type="text" v-model="item" placeholder="Type what you have to do" @keyup.enter="addTodo">
+        <span class="addContainer" @click="addTodo">
             <i class="addBtn fas fa-plus" aria-hidden="true"></i>
         </span>
     </div>
