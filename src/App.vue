@@ -125,18 +125,62 @@ const popupAlert =()=>{
 </style> -->
 
 <script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
 import TodoFooter from './components/TodoFooter.vue';
 import TodoHeader from './components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
 import TodoList from './components/TodoList.vue';
+import emitter from './shared/eventBus';
 
+const todoItems = ref([]);
+
+const loadTodos = ()=> {
+  todoItems.value = Object.keys(localStorage)
+}
+
+const handleAddTodo = (text) =>{
+  //trim 함수는 문자열의 양 끝에 있는 공백을 모두 제거하고 새로운 문자열을 반환한다.
+  const res = String(text ?? '').trim();
+  if(!res) return;
+
+  //LocalStorage 저장
+  localStorage.setItem(res, res);
+  
+  // 화면 목록 갱신, 중복 방지
+  if(!todoItems.value.includes(res)){
+    todoItems.value.push(res)
+  }
+}
+
+const removeTodo = ({item, idx}) => {
+  localStorage.removeItem(item)
+  todoItems.value.splice(idx, 1)
+}
+
+const clearTodo =()=>{
+  localStorage.clear();
+  todoItems.value = []
+}
+// 관련 구독을 모아서 한 번에 등록한다.
+// 예를 들어 todo:remove 이벤트가 발생하면 onMounted의 모든 on이 실행되는 것이 아니라 발생한 이벤트에 연결된 핸들러 1개만 실행된다.
+onMounted(() =>{
+  loadTodos()
+  emitter.on('todo:add', handleAddTodo);
+  emitter.on('todo:remove', removeTodo);
+  emitter.on('todo:clear', clearTodo);
+})
+onUnmounted(()=>{
+  emitter.off('todo:add', handleAddTodo);
+  emitter.off('todo:remove', removeTodo);
+  emitter.off('todo:clear', clearTodo);
+})
 
 </script>
 
 <template>
   <TodoHeader />
   <TodoInput />
-  <TodoList />
+  <TodoList :propsdata="todoItems"/>
   <TodoFooter />
 </template>
 
