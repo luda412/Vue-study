@@ -1,20 +1,14 @@
 <!-- 할 일 목록 표시 및 특정 할 일 삭제 -->
 <script setup>
-import { onMounted, ref } from 'vue';
+import emitter from '@/shared/eventBus';
 
-const items = ref([]);
-onMounted(() =>{
-    if(localStorage.length > 0){
-        for(let i=0; i < localStorage.length; i++){
-            items.value.push(localStorage.key(i))
-        }
-    }
+
+const props = defineProps({
+    propsdata: { type:Array, default: () => []}
 })
 
-const removeTodo =(item, idx)=>{
-    localStorage.removeItem(item);
-    items.value.splice(idx, 1)
-    console.log(item, idx)
+const onRemove = (item, idx) => {
+    emitter.emit('todo:remove', {item, idx})
 }
 
 </script>
@@ -22,10 +16,10 @@ const removeTodo =(item, idx)=>{
 <template>
     <section>
         <ul>
-            <li v-for="(item, idx) in items":key="item" calss="shadow">
+            <li v-for="(item, idx) in props.propsdata" :key="item" class="shadow">
                 <i class="checkBtn fas fa-check" aria-hidden="true"></i>
                     {{ item }}
-                <span class="removeBtn" type="button" @click="removeTodo(item, idx)">
+                <span class="removeBtn" type="button" @click="onRemove(item, idx)">
                     <i class="far fa-trash-alt" aria-hidden="true"></i>
                 </span>
             </li>
