@@ -1,13 +1,15 @@
 <!-- 할 일 모두 삭제 -->
 <script setup>
-const clearTodo =()=>{
-    localStorage.clear();
+import emitter from '@/shared/eventBus';
+
+const onClear =()=>{
+    emitter.emit('todo:clear')
 }
 </script>
 
 <template>
     <div class="clearAllContainer">
-        <span class="clearAllBtn" @click="clearTodo">Clear All</span>
+        <span class="clearAllBtn" @click="onClear">Clear All</span>
     </div>
 </template>
 <style scoped>
@@ -21,6 +23,6 @@ const clearTodo =()=>{
     }
     .clearAllBtn {
         color: #e20303;
-        display: black;
+        display: block;
     }
 </style>
