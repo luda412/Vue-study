@@ -131,6 +131,13 @@ import TodoHeader from './components/TodoHeader.vue';
 import TodoInput from './components/TodoInput.vue';
 import TodoList from './components/TodoList.vue';
 import emitter from './shared/eventBus';
+import Modal from './components/common/modal.vue';
+
+// 편집 모달 상태
+const showEditModal = ref(false)
+const editIdx = ref(-1);
+const editOriginal = ref('');
+const editDraft = ref('');
 
 const todoItems = ref([]);
 
@@ -161,6 +168,50 @@ const clearTodo =()=>{
   localStorage.clear();
   todoItems.value = []
 }
+
+// 편집 열기 (리스트 클릭 시)
+const openEdit = ({item, idx}) =>{
+  editIdx.value = idx
+  editOriginal.value = item;
+  editDraft.value = item;
+  showEditModal.value = true;
+}
+
+const closeEdit =()=>{
+  showEditModal.value = false;
+  editIdx.value = -1;
+  editOriginal.value = ''
+  editDraft.value = ''
+}
+
+// 편집 저장
+const saveEdit = ()=>{
+  const idx = editIdx.value
+  const oldText = editOriginal.value
+  const newText = String(editDraft.value ?? '').trim()
+
+  if(idx < 0) return
+
+  if(!newText) return
+
+  if(newText === oldText){
+    closeEdit();
+    return;
+  }
+
+  // 중복 방지
+  if (todoItems.value.includes(newText)){
+    return;
+  };
+
+  localStorage.removeItem(oldText)
+  localStorage.setItem(newText, newText);
+
+  todoItems.value[idx] = newText;
+
+  closeEdit();
+}
+
 // 관련 구독을 모아서 한 번에 등록한다.
 // 예를 들어 todo:remove 이벤트가 발생하면 onMounted의 모든 on이 실행되는 것이 아니라 발생한 이벤트에 연결된 핸들러 1개만 실행된다.
 onMounted(() =>{
@@ -168,11 +219,13 @@ onMounted(() =>{
   emitter.on('todo:add', handleAddTodo);
   emitter.on('todo:remove', removeTodo);
   emitter.on('todo:clear', clearTodo);
+  emitter.on('todo:edit:open', openEdit)
 })
 onUnmounted(()=>{
   emitter.off('todo:add', handleAddTodo);
   emitter.off('todo:remove', removeTodo);
   emitter.off('todo:clear', clearTodo);
+  emitter.off('todo:edit:open', openEdit)
 })
 
 </script>
@@ -182,6 +235,21 @@ onUnmounted(()=>{
   <TodoInput />
   <TodoList :propsdata="todoItems"/>
   <TodoFooter />
+
+  <Modal v-if="showEditModal" @close="closeEdit">
+    <template #header>
+      <h3>할 일 수정</h3>
+    </template>
+
+    <template #body>
+      <input v-model="editDraft" type="text" style="width:100%;" @keyup.enter="saveEdit"/>
+    </template>
+
+    <template #footer>
+      <button class="modal-default-button" @click="closeEdit">취소</button>
+      <button class="modal-default-button" @click="saveEdit">저장</button>
+    </template>
+  </Modal>
 </template>
 
 <style>
