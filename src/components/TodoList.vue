@@ -11,15 +11,20 @@ const onRemove = (item, idx) => {
     emitter.emit('todo:remove', {item, idx})
 }
 
+const onEdit =(item, idx) => {
+    emitter.emit('todo:edit:open', {item, idx})
+}
 </script>
 
 <template>
     <section>
         <ul>
-            <li v-for="(item, idx) in props.propsdata" :key="item" class="shadow">
+            <li v-for="(item, idx) in props.propsdata" :key="item" 
+            class="shadow" @click="onEdit(item, idx)" style="cursor: pointer;">
                 <i class="checkBtn fas fa-check" aria-hidden="true"></i>
                     {{ item }}
-                <span class="removeBtn" type="button" @click="onRemove(item, idx)">
+
+                <span class="removeBtn" type="button" @click.stop="onRemove(item, idx)">
                     <i class="far fa-trash-alt" aria-hidden="true"></i>
                 </span>
             </li>
